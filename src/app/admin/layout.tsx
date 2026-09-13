@@ -8,12 +8,17 @@ import { messagesService, uploadTracker } from '@/lib/services'
 import { Spinner } from '@/components/ui'
 import {
   LayoutDashboard, FolderOpen, Award, Image, FileText, Zap, MessageSquare,
-  Settings, LogOut, ChevronRight, Menu, X
+  Settings, LogOut, ChevronRight, Menu, X, Gauge, Landmark, BookOpen, Newspaper, Radio
 } from 'lucide-react'
 
 const navItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/projects', label: 'Projects', icon: FolderOpen },
+  { href: '/admin/projects', label: 'Case Studies', icon: FolderOpen },
+  { href: '/admin/metrics', label: 'Metrics', icon: Gauge },
+  { href: '/admin/finance', label: 'Finance & Strategy', icon: Landmark },
+  { href: '/admin/research', label: 'Research', icon: BookOpen },
+  { href: '/admin/insights', label: 'Insights', icon: Newspaper },
+  { href: '/admin/now', label: 'Now', icon: Radio },
   { href: '/admin/certificates', label: 'Certificates', icon: Award },
   { href: '/admin/gallery', label: 'Gallery', icon: Image },
   { href: '/admin/cv', label: 'CV Upload', icon: FileText },

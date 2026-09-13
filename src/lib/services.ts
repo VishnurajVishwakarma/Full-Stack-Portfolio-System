@@ -1,7 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import type {
   Project, Certificate, Skill, GalleryImage,
-  CVFile, ContactMessage, SiteSettings, DashboardStats
+  CVFile, ContactMessage, SiteSettings, DashboardStats,
+  Metric, FinanceItem, ResearchPublication, Article
 } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 import imageCompression from 'browser-image-compression';
@@ -155,6 +156,12 @@ export const projectsService = {
     })
   },
 
+  async getBySlug(slug: string): Promise<Project | null> {
+    const { data, error } = await supabase.from('projects').select('*').eq('slug', slug).single()
+    if (error) return null
+    return data as Project
+  },
+
   async create(data: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>, imageFile?: File): Promise<string> {
     let imageUrl = data.imageUrl
     if (imageFile) imageUrl = await uploadFile(imageFile, 'projects')
@@ -201,6 +208,53 @@ export const projectsService = {
     return () => { supabase.removeChannel(channel) }
   },
 }
+
+// ─── EXECUTIVE CONTENT ──────────────────────────────────────────────────────
+
+function createContentService<T extends { id: string }>(table: string) {
+  return {
+    async getAll(): Promise<T[]> {
+      const { data, error } = await supabase.from(table).select('*').order('order')
+      // New sections stay gracefully empty until the checked-in migration is applied.
+      if (error) return []
+      return (data || []) as T[]
+    },
+    async getBySlug(slug: string): Promise<T | null> {
+      const { data, error } = await supabase.from(table).select('*').eq('slug', slug).single()
+      if (error) return null
+      return data as T
+    },
+    async create(data: Omit<T, 'id'>): Promise<string> {
+      const { data: result, error } = await supabase.from(table).insert(data).select('id').single()
+      if (error) throw error
+      clearCache(table)
+      return result.id
+    },
+    async update(id: string, data: Partial<T>): Promise<void> {
+      const { error } = await supabase.from(table).update(data).eq('id', id)
+      if (error) throw error
+      clearCache(table)
+    },
+    async delete(id: string): Promise<void> {
+      const { error } = await supabase.from(table).delete().eq('id', id)
+      if (error) throw error
+      clearCache(table)
+    },
+    subscribe(callback: (items: T[]) => void) {
+      const refresh = async () => callback(await this.getAll())
+      refresh()
+      const channel = supabase.channel(`${table}_changes`)
+        .on('postgres_changes', { event: '*', schema: 'public', table }, refresh)
+        .subscribe()
+      return () => { supabase.removeChannel(channel) }
+    }
+  }
+}
+
+export const metricsService = createContentService<Metric>('metrics')
+export const financeService = createContentService<FinanceItem>('finance_items')
+export const researchService = createContentService<ResearchPublication>('research_publications')
+export const articlesService = createContentService<Article>('articles')
 
 // ─── CERTIFICATES ─────────────────────────────────────────────────────────────
 
@@ -474,7 +528,10 @@ export const settingsService = {
           githubUrl: '',
           linkedinUrl: '',
           availability: false,
-          profileImage: ''
+          profileImage: '',
+          nowText: '',
+          academicProofUrl: '',
+          companyUrl: ''
         } as SiteSettings
       }
       return data as SiteSettings

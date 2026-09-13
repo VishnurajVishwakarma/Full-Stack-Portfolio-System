@@ -14,7 +14,7 @@ export default function ProjectsAdmin() {
   const [file, setFile] = useState<File | undefined>(undefined)
   const [loading, setLoading] = useState(false)
 
-  const emptyForm = { title: '', description: '', stack: '', githubUrl: '', liveUrl: '', proofUrl: '', order: 0 }
+  const emptyForm = { title: '', slug: '', category: 'Technology', description: '', summary: '', problem: '', objective: '', role: '', approach: '', businessImpact: '', results: '', stack: '', githubUrl: '', liveUrl: '', proofUrl: '', featured: false, visible: true, order: 0 }
   const [formData, setFormData] = useState(emptyForm)
 
   useEffect(() => {
@@ -26,11 +26,22 @@ export default function ProjectsAdmin() {
       setEditing(proj)
       setFormData({
         title: proj.title,
+        slug: proj.slug || '',
+        category: proj.category || 'Technology',
         description: proj.description,
+        summary: proj.summary || '',
+        problem: proj.problem || '',
+        objective: proj.objective || '',
+        role: proj.role || '',
+        approach: proj.approach || '',
+        businessImpact: proj.businessImpact || '',
+        results: proj.results || '',
         stack: proj.stack.join(', '),
         githubUrl: proj.githubUrl || '',
         liveUrl: proj.liveUrl || '',
         proofUrl: proj.proofUrl || '',
+        featured: proj.featured || false,
+        visible: proj.visible !== false,
         order: proj.order || 0
       })
     } else {
@@ -47,11 +58,22 @@ export default function ProjectsAdmin() {
     
     const payload = {
       title: formData.title,
+      slug: formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      category: formData.category,
       description: formData.description,
+      summary: formData.summary,
+      problem: formData.problem,
+      objective: formData.objective,
+      role: formData.role,
+      approach: formData.approach,
+      businessImpact: formData.businessImpact,
+      results: formData.results,
       stack: formData.stack.split(',').map(s => s.trim()).filter(Boolean),
       githubUrl: formData.githubUrl,
       liveUrl: formData.liveUrl,
       proofUrl: formData.proofUrl,
+      featured: formData.featured,
+      visible: formData.visible,
       order: formData.order
     }
 
@@ -84,9 +106,9 @@ export default function ProjectsAdmin() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white font-mono tracking-widest">PROJECTS</h1>
+        <h1 className="text-2xl font-bold text-white font-mono tracking-widest">CASE STUDIES</h1>
         <Button onClick={() => handleOpen()} className="bg-[#00f0ff] text-ink-950 hover:bg-[#00d0e0]">
-          <Plus size={16} className="mr-2" /> Add Project
+          <Plus size={16} className="mr-2" /> Add Case Study
         </Button>
       </div>
 
@@ -116,10 +138,23 @@ export default function ProjectsAdmin() {
         ))}
       </div>
 
-      <Modal open={isOpen} onClose={() => setIsOpen(false)} title={editing ? 'Edit Project' : 'New Project'} size="lg">
+      <Modal open={isOpen} onClose={() => setIsOpen(false)} title={editing ? 'Edit Case Study' : 'New Case Study'} size="lg">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input label="Project Title" value={formData.title} onChange={(e: any) => setFormData({ ...formData, title: e.target.value })} required />
+          <div className="grid grid-cols-2 gap-4">
+            <Input label="Slug" value={formData.slug} onChange={(e: any) => setFormData({ ...formData, slug: e.target.value })} placeholder="generated-from-title" />
+            <Input label="Category" value={formData.category} onChange={(e: any) => setFormData({ ...formData, category: e.target.value })} placeholder="Business Systems, AI, Analytics..." />
+          </div>
           <Textarea label="Description" value={formData.description} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} required />
+          <Textarea label="Short Summary" value={formData.summary} onChange={(e: any) => setFormData({ ...formData, summary: e.target.value })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Textarea label="Problem" value={formData.problem} onChange={(e: any) => setFormData({ ...formData, problem: e.target.value })} />
+            <Textarea label="Objective" value={formData.objective} onChange={(e: any) => setFormData({ ...formData, objective: e.target.value })} />
+            <Textarea label="My Role" value={formData.role} onChange={(e: any) => setFormData({ ...formData, role: e.target.value })} />
+            <Textarea label="Solution / Approach" value={formData.approach} onChange={(e: any) => setFormData({ ...formData, approach: e.target.value })} />
+            <Textarea label="Business Impact" value={formData.businessImpact} onChange={(e: any) => setFormData({ ...formData, businessImpact: e.target.value })} />
+            <Textarea label="Verified Results / Metrics" value={formData.results} onChange={(e: any) => setFormData({ ...formData, results: e.target.value })} />
+          </div>
           <Input label="Tech Stack (comma separated)" value={formData.stack} onChange={(e: any) => setFormData({ ...formData, stack: e.target.value })} required placeholder="React, Node.js, Firebase" />
           
           <div className="grid grid-cols-2 gap-4">
@@ -135,6 +170,10 @@ export default function ProjectsAdmin() {
           </div>
 
           <Input label="Display Order" type="number" value={formData.order} onChange={(e: any) => setFormData({ ...formData, order: Number(e.target.value) })} required />
+          <div className="flex flex-wrap gap-6 text-sm text-ink-300">
+            <label className="flex items-center gap-2"><input type="checkbox" checked={formData.featured} onChange={e => setFormData({ ...formData, featured: e.target.checked })} /> Featured</label>
+            <label className="flex items-center gap-2"><input type="checkbox" checked={formData.visible} onChange={e => setFormData({ ...formData, visible: e.target.checked })} /> Visible publicly</label>
+          </div>
           
           <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/10">
             <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>

@@ -98,6 +98,19 @@ export default function SettingsAdmin() {
           />
         </div>
 
+        <div className="bg-ink-900 border border-white/10 p-6 rounded-xl">
+          <div className="flex items-center gap-3 mb-6">
+            <Briefcase size={18} className="text-[#00f0ff]" />
+            <h2 className="text-lg font-bold text-white">Now</h2>
+          </div>
+          <Textarea
+            label="Current focus"
+            rows={3}
+            placeholder="Currently pursuing PGDM while building..."
+            {...register('nowText')}
+          />
+        </div>
+
         {/* Contact Links */}
         <div className="bg-ink-900 border border-white/10 p-6 rounded-xl">
           <div className="flex items-center gap-3 mb-6">
@@ -110,6 +123,8 @@ export default function SettingsAdmin() {
             <Input label="Location (e.g. Mumbai, India)" {...register('location')} />
             <Input label="GitHub URL" {...register('githubUrl')} />
             <Input label="LinkedIn URL" {...register('linkedinUrl')} />
+            <Input label="Academic Record / Credential URL" {...register('academicProofUrl')} />
+            <Input label="Austrange Company / Product URL" {...register('companyUrl')} />
           </div>
           <div className="mt-4 flex items-center gap-3">
             <input type="checkbox" id="availability" {...register('availability')} className="w-4 h-4 bg-ink-950 border-white/10 text-[#00f0ff] rounded" />

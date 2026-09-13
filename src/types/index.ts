@@ -8,6 +8,17 @@ export interface Project {
   liveUrl?: string;
   proofUrl?: string;
   order?: number;
+  slug?: string;
+  category?: string;
+  summary?: string;
+  problem?: string;
+  objective?: string;
+  role?: string;
+  approach?: string;
+  businessImpact?: string;
+  results?: string;
+  featured?: boolean;
+  visible?: boolean;
 }
 
 export interface Certificate {
@@ -56,6 +67,65 @@ export interface SiteSettings {
   linkedinUrl: string;
   availability: boolean;
   profileImage?: string;
+  nowText?: string;
+  academicProofUrl?: string;
+  companyUrl?: string;
+}
+
+export interface Metric {
+  id: string;
+  value: string;
+  label: string;
+  description?: string;
+  order?: number;
+  visible?: boolean;
+}
+
+export interface FinanceItem {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  content?: string;
+  externalUrl?: string;
+  documentUrl?: string;
+  featured?: boolean;
+  publishedAt?: string;
+  visible?: boolean;
+  order?: number;
+}
+
+export interface ResearchPublication {
+  id: string;
+  title: string;
+  slug: string;
+  authors?: string;
+  publication?: string;
+  year?: string;
+  summary?: string;
+  researchArea?: string;
+  publicationUrl?: string;
+  documentUrl?: string;
+  featured?: boolean;
+  visible?: boolean;
+  order?: number;
+}
+
+export interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content?: string;
+  category: string;
+  coverImage?: string;
+  publishedAt?: string;
+  featured?: boolean;
+  visible?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  order?: number;
 }
 
 export interface ContactMessage {
