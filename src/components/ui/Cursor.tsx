@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
+
+const emptySubscribe = () => () => {};
 
 export default function Cursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [hidden, setHidden] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
   
   useEffect(() => {
-    setIsMounted(true);
     const fn = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
