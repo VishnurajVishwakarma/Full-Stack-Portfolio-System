@@ -20,9 +20,7 @@ create unique index if not exists projects_slug_unique
   on public.projects (slug) where slug is not null;
 
 alter table if exists public.settings
-  add column if not exists "nowText" text,
-  add column if not exists "academicProofUrl" text,
-  add column if not exists "companyUrl" text;
+  add column if not exists "nowText" text;
 
 create table if not exists public.metrics (
   id uuid primary key default gen_random_uuid(),

@@ -198,11 +198,11 @@ export const projectsService = {
       const data = await this.getAll(publishedOnly)
       callback(data)
     }
-    fetchAndCall()
+    fetchAndCall().catch(() => callback([]))
     const channel = supabase.channel('projects_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, () => {
         clearCache('projects')
-        fetchAndCall()
+        fetchAndCall().catch(() => callback([]))
       })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
@@ -531,7 +531,14 @@ export const settingsService = {
           profileImage: '',
           nowText: '',
           academicProofUrl: '',
-          companyUrl: ''
+          companyUrl: '',
+          cielUrl: '',
+          nowBuilding: '',
+          nowOperating: '',
+          nowContributing: '',
+          nowLearning: '',
+          nowResearching: '',
+          nowExploring: ''
         } as SiteSettings
       }
       return data as SiteSettings

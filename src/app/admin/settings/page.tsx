@@ -125,6 +125,7 @@ export default function SettingsAdmin() {
             <Input label="LinkedIn URL" {...register('linkedinUrl')} />
             <Input label="Academic Record / Credential URL" {...register('academicProofUrl')} />
             <Input label="Austrange Company / Product URL" {...register('companyUrl')} />
+            <Input label="CIEL Official URL" {...register('cielUrl')} />
           </div>
           <div className="mt-4 flex items-center gap-3">
             <input type="checkbox" id="availability" {...register('availability')} className="w-4 h-4 bg-ink-950 border-white/10 text-[#00f0ff] rounded" />

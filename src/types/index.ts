@@ -70,6 +70,13 @@ export interface SiteSettings {
   nowText?: string;
   academicProofUrl?: string;
   companyUrl?: string;
+  cielUrl?: string;
+  nowBuilding?: string;
+  nowOperating?: string;
+  nowContributing?: string;
+  nowLearning?: string;
+  nowResearching?: string;
+  nowExploring?: string;
 }
 
 export interface Metric {
